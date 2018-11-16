@@ -8,10 +8,10 @@ import wandb
 run = wandb.init()
 config = run.config
 config.first_layer_convs = 32
-config.first_layer_conv_width = 3
+config.first_layer_conv_width = 3 # 3 X 3 matrix
 config.first_layer_conv_height = 3
 config.dropout = 0.2
-config.dense_layer_size = 128
+config.dense_layer_size = 128 # first hidden layer
 config.img_width = 28
 config.img_height = 28
 config.epochs = 10
@@ -24,7 +24,9 @@ X_test = X_test.astype('float32')
 X_test /= 255.
 
 #reshape input data
-X_train = X_train.reshape(X_train.shape[0], config.img_width, config.img_height, 1)
+X_train = X_train.reshape(X_train.shape[0], config.img_width, config.img_height, 1) # conv2 always expects 3rd ...
+# dimension, single channel initially, so gotta reshape data and add 3rd D, wraps another array around each. 
+# RGB images already have a 3rd dimension
 X_test = X_test.reshape(X_test.shape[0], config.img_width, config.img_height, 1)
 
 # one hot encode outputs
@@ -37,11 +39,15 @@ labels=range(10)
 model = Sequential()
 model.add(Conv2D(32,
     (config.first_layer_conv_width, config.first_layer_conv_height),
-    input_shape=(28, 28,1),
+    input_shape=(28, 28,1), # only do this first time
     activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Conv2D(64, # 64 because img is shrinking
+    (config.first_layer_conv_width, config.first_layer_conv_height),
+    activation='relu'))
+model.add(MaxPooling2D())
 model.add(Flatten())
-model.add(Dense(config.dense_layer_size, activation='relu'))
+model.add(Dense(config.dense_layer_size, activation='relu')) # any dense layer not output layer, is hidden layer
 model.add(Dense(num_classes, activation='softmax'))
 
 model.compile(loss='categorical_crossentropy', optimizer='adam',
