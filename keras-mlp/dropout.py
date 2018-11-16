@@ -12,7 +12,7 @@ run = wandb.init()
 config = run.config
 config.optimizer = "adam"
 config.epochs = 50
-config.dropout = 0.4
+config.dropout = 0.4 # zero out 40% of inputs (20-50% is used generally)
 config.hidden_nodes = 100
 
 # load data
@@ -35,9 +35,10 @@ num_classes = y_train.shape[1]
 # create model
 model=Sequential()
 model.add(Flatten(input_shape=(img_width,img_height)))
+model.add(Dense(10, activation='relu'))
 model.add(Dropout(config.dropout))
 model.add(Dense(config.hidden_nodes, activation='relu'))
-model.add(Dropout(config.dropout))
+model.add(Dropout(config.dropout)) # 40 percent of pixels, make them zero
 model.add(Dense(num_classes, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer=config.optimizer,
                     metrics=['accuracy'])

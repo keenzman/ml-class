@@ -14,7 +14,7 @@ config = run.config
 config.optimizer = "adam"
 config.epochs = 50
 config.dropout = 10
-config.hidden_nodes = 100
+config.hidden_nodes = 10 # how many perceptrons we wanna put in hidden layer
 
 # load data
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
@@ -37,7 +37,8 @@ num_classes = y_train.shape[1]
 # create model
 model = Sequential()
 model.add(Flatten(input_shape=(img_width, img_height)))
-model.add(Dense(config.hidden_nodes, activation='relu'))
+model.add(Dense(config.hidden_nodes * 2, activation='relu')) # hidden layer with 20 nodes
+model.add(Dense(config.hidden_nodes, activation='relu')) # hidden layer with 10 nodes
 model.add(Dense(num_classes, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer=config.optimizer,
               metrics=['accuracy'])
