@@ -15,7 +15,7 @@ config.epochs = 50
 config.dropout = 0.4 # zero out 40% of inputs (20-50% is used generally)
 config.hidden_nodes = 100
 
-# load data
+# load data #Hi my G
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 img_width = X_train.shape[1]
 img_height = X_train.shape[2]
