@@ -25,7 +25,7 @@ num_classes = y_train.shape[1]
 # create model
 model = Sequential()
 model.add(Flatten(input_shape=(img_width, img_height)))
-model.add(Dense(num_classes))
+model.add(Dense(num_classes, activation = 'sigmoid')) # 10 perceptrons in this final layer // 7850 weights total
 model.compile(loss='mse', optimizer='adam',
               metrics=['accuracy'])
 
